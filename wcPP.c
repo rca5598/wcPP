@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <ctype.h>
 
 int main(int argc, char *argv[])
 {
@@ -17,14 +18,18 @@ int main(int argc, char *argv[])
     char *flag = argv[1];
     int count = 0;
     int c;
+    int in_word = 0;
 
-    while ((c = fgetc(fp)) != EOF)
+    if (strcmp(flag, "-c") == 0)
     {
-        if (strcmp(flag, "-c") == 0)
+        while ((c = fgetc(fp)) != EOF)
         {
             count++;
         }
-        else if (strcmp(flag, "-l") == 0)
+    }
+    else if (strcmp(flag, "-l") == 0)
+    {
+        while ((c = fgetc(fp)) != EOF)
         {
             if (c == '\n')
             {
@@ -32,7 +37,22 @@ int main(int argc, char *argv[])
             }
         }
     }
-
+    else if (strcmp(flag, "-w") == 0)
+    {
+        while ((c = fgetc(fp)) != EOF)
+            if (isspace(c))
+            {
+                in_word = 0;
+            }
+            else
+            {
+                if (in_word == 0)
+                {
+                    count++;
+                    in_word = 1;
+                }
+            }
+    }
     fclose(fp);
     printf("%d %s\n", count, argv[2]);
     return 0;
