@@ -6,8 +6,8 @@ int main(int argc, char *argv[])
 {
     if (argc < 3)
     {
-        fprintf(stderr, "Usage: %s <filename>\n", argv[0]); // User error message, should be updated
-        return 1;                                           // Should be replaced with error
+        fprintf(stderr, "Usage: wcPP -c|-l|-w <filename>\n"); // User error message, should be updated
+        return 1;                                             // Should be replaced with error
     }
     FILE *fp = fopen(argv[2], "r");
     if (fp == NULL)
@@ -40,7 +40,8 @@ int main(int argc, char *argv[])
     else if (strcmp(flag, "-w") == 0)
     {
         while ((c = fgetc(fp)) != EOF)
-            if (isspace(c))
+        {
+            if (isspace((unsigned char)c))
             {
                 in_word = 0;
             }
@@ -52,6 +53,7 @@ int main(int argc, char *argv[])
                     in_word = 1;
                 }
             }
+        }
     }
     fclose(fp);
     printf("%d %s\n", count, argv[2]);
